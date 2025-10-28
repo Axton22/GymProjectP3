@@ -4,10 +4,15 @@
  */
 package com.example.GymServer.API.repositories;
 
+import com.example.GymServer.API.entities.ReservationEntity;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 /**
  *
  * @author Axton Urbina
  */
-public class ReservationRepository {
+@Repository
+public interface ReservationRepository extends CrudRepository<ReservationEntity, Integer> {
     
 }
