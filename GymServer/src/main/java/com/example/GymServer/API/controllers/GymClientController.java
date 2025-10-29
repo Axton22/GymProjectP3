@@ -51,4 +51,6 @@ public class GymClientController {
             return "No se pudo eliminar el cliente" + "\nID:" + id;
         }
     }
+
+
 }

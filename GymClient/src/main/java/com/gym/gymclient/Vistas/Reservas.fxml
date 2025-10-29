@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.gym.gymclient.Controlador.ReservasController">
+   <children>
+      <Button layoutX="78.0" layoutY="231.0" mnemonicParsing="false" text="BUSCAR RESERVA" />
+      <Button layoutX="339.0" layoutY="307.0" mnemonicParsing="false" text="ELIMINAR" />
+      <Button layoutX="196.0" layoutY="307.0" mnemonicParsing="false" text="GUARDAR" />
+      <Button layoutX="261.0" layoutY="231.0" mnemonicParsing="false" text="BUSCAR TODOS" />
+      <Button layoutX="443.0" layoutY="231.0" mnemonicParsing="false" text="EDITAR RESERVA" />
+   </children>
+</AnchorPane>

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Axton Urbina
  */
+
 @Service
 public class GymClientService {
     @Autowired
@@ -40,4 +41,5 @@ public class GymClientService {
             return false;
         }
     }
+
 } 
