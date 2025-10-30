@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,12 @@ public class GymRoutineController {
     
     @PostMapping()
     public GymRoutineEntity saveRoutine(@RequestBody GymRoutineEntity routine) {
+        return this.gymRoutineService.saveRoutine(routine);
+    }
+    
+    @PutMapping("/{id}")
+    public GymRoutineEntity updateRoutine(@PathVariable("id") Integer id, @RequestBody GymRoutineEntity routine) {
+        routine.setRoutineID(id);
         return this.gymRoutineService.saveRoutine(routine);
     }
     

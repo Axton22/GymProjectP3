@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,12 @@ public class GymClientController {
     
     @PostMapping()
     public GymClientEntity saveClient(@RequestBody GymClientEntity client) {
+        return this.gymClientService.saveClient(client);
+    }
+    
+    @PutMapping("/{id}")
+    public GymClientEntity updateClient(@PathVariable("id") Integer id, @RequestBody GymClientEntity client) {
+        client.setClientID(id);
         return this.gymClientService.saveClient(client);
     }
     
