@@ -17,6 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+
 public class RutinasController implements Initializable {
 
     @FXML
@@ -34,84 +35,92 @@ public class RutinasController implements Initializable {
     @FXML
     private TableView<GymRutinaEntity> TablaRutina;
     @FXML
-    private TableColumn<GymRutinaEntity,Long> colidR;
-
+    private TableColumn<GymRutinaEntity, Long> colidR;
     @FXML
-    private TableColumn<GymRutinaEntity,String > colRutina;
+    private TableColumn<GymRutinaEntity, String> colNameR;
     @FXML
-    private TableColumn<GymRutinaEntity, String> colNombre;
+    private TableColumn<GymRutinaEntity, String> coldia;
     @FXML
-    private TableColumn<GymRutinaEntity, String> colTelefono;
+    private TableColumn<GymRutinaEntity, String> colinicio;
     @FXML
-    private TableColumn<GymRutinaEntity, String> colCorreo;
+    private TableColumn<GymRutinaEntity, String> colfin;
     @FXML
     private TextField txtNombre;
     @FXML
-    private TextField txttelefono;
-    @FXML
-    private TextField txtcorreo;
-    @FXML
     private TextField txtidEditRU;
     @FXML
-    private TextField txtRutina;
-    @FXML
     private TextField txtiddelete;
+    @FXML
+    private TextField txtdia;
+    @FXML
+    private TextField txtincio;
+    @FXML
+    private TextField txtfin;
+
     private boolean rutinaCargada = false;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        colidR.setCellValueFactory(new PropertyValueFactory<>("RutinaID"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        colCorreo.setCellValueFactory(new PropertyValueFactory<>("mail"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        colRutina.setCellValueFactory(new PropertyValueFactory<>("RutinaType"));
-    }  
-        private void mostrarAlerta(String titulo, String mensaje) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(titulo);
-    alert.setHeaderText(null);
-    alert.setContentText(mensaje);
-    alert.showAndWait();
-}
+        // Los nombres deben coincidir exactamente con los getters de GymRutinaEntity
+        colidR.setCellValueFactory(new PropertyValueFactory<>("routineID"));
+        colNameR.setCellValueFactory(new PropertyValueFactory<>("routineName"));
+        coldia.setCellValueFactory(new PropertyValueFactory<>("dayWeek"));
+        colinicio.setCellValueFactory(new PropertyValueFactory<>("starHour"));
+        colfin.setCellValueFactory(new PropertyValueFactory<>("endHour"));
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    // 🔍 Buscar una rutina por ID
     @FXML
     private void BtnBUSCAR_RUTINA(ActionEvent event) {
-         try {
-        Long id = Long.parseLong(txtidRU.getText().trim());
-        GymRutinaEntity rutina = GymRutinaServiceFX.getRutinaById(id);
+        try {
+            Long id = Long.parseLong(txtidRU.getText().trim());
+            GymRutinaEntity rutina = GymRutinaServiceFX.getRutinaById(id);
 
-        if (rutina != null) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Rutina encontrada");
-            alert.setHeaderText("Información del cliente y rutina");
-            alert.setContentText(
-                "ID: " + rutina.getClientID() + "\n" +
-                "Nombre: " + rutina.getClientName() + "\n" +
-                "Correo: " + rutina.getMail() + "\n" +
-                "Teléfono: " + rutina.getPhone() + "\n" +
-                "Rutina: " + rutina.getRutinaType()
-            );
-            alert.showAndWait();
-        } else {
-            mostrarAlerta("No encontrado", "No se encontró ninguna rutina con el ID " + id);
+            if (rutina != null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Rutina encontrada");
+                alert.setHeaderText("Información de la rutina");
+                alert.setContentText(
+                        "ID: " + rutina.getRoutineID()+ "\n" +
+                        "Nombre: " + rutina.getRoutineName()+ "\n" +
+                        "Día: " + rutina.getDayWeek()+ "\n" +
+                        "Hora inicio: " + rutina.getEndHour()+ "\n" +
+                        "Hora fin: " + rutina.getEndHour()
+                );
+                alert.showAndWait();
+            } else {
+                mostrarAlerta("No encontrado", "No se encontró ninguna rutina con el ID " + id);
+            }
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error", "Ingrese un ID válido.");
         }
-    } catch (NumberFormatException e) {
-  mostrarAlerta("Error", "Ingrese un id valido.");
-    }   
     }
 
+    // 📋 Mostrar todas las rutinas
     @FXML
     private void BtnBUSCAR_TODOS(ActionEvent event) {
-      List<GymRutinaEntity> reservas = GymRutinaServiceFX.getAllRutinas();
+        List<GymRutinaEntity> rutinas = GymRutinaServiceFX.getAllRutinas();
 
-        if (reservas != null) {
-            ObservableList<GymRutinaEntity> datosTabla = FXCollections.observableArrayList(reservas);
+        if (rutinas != null) {
+            ObservableList<GymRutinaEntity> datosTabla = FXCollections.observableArrayList(rutinas);
             TablaRutina.setItems(datosTabla);
         } else {
-            mostrarAlerta("Error", "No se pudieron obtener las reservas del servidor.");
-        } 
+            mostrarAlerta("Error", "No se pudieron obtener las rutinas del servidor.");
+        }
     }
+
+    // ✏️ Editar una rutina
     @FXML
     private void BtnEDITAR_Rutina(ActionEvent event) {
-   String idText = txtidEditRU.getText().trim();
+        String idText = txtidEditRU.getText().trim();
 
         if (idText.isEmpty()) {
             mostrarAlerta("Error", "Debe ingresar un ID");
@@ -125,33 +134,33 @@ public class RutinasController implements Initializable {
                 GymRutinaEntity rutina = GymRutinaServiceFX.getRutinaById(id);
 
                 if (rutina != null) {
-                    txtNombre.setText(rutina.getClientName());
-                    txtcorreo.setText(rutina.getMail());
-                    txttelefono.setText(rutina.getPhone());
-                    txtRutina.setText(rutina.getRutinaType());
+                    txtNombre.setText(rutina.getRoutineName());
+                    txtincio.setText(rutina.getStarHour());
+                    txtdia.setText(rutina.getDayWeek());
+                    txtfin.setText(rutina.getEndHour());
 
                     rutinaCargada = true;
-                    mostrarAlerta("Reserva cargada", "Modifica los datos y presiona nuevamente 'Editar'");
+                    mostrarAlerta("Rutina cargada", "Modifica los datos y presiona nuevamente 'Editar'");
                 } else {
-                    mostrarAlerta("No encontrada", "No existe una reserva con ese ID");
+                    mostrarAlerta("No encontrada", "No existe una rutina con ese ID");
                 }
             } else {
-                GymRutinaEntity reservaEditada = new GymRutinaEntity(
-                    txtNombre.getText(),
-                    txtcorreo.getText(),
-                    txttelefono.getText(),
-                    txtRutina.getText()
+                GymRutinaEntity rutinaEditada = new GymRutinaEntity(
+                        txtNombre.getText(),
+                        txtdia.getText(),
+                        txtincio.getText(),
+                        txtfin.getText()
                 );
 
-                boolean exito = GymRutinaServiceFX.updateReserva(id, reservaEditada);
+                boolean exito = GymRutinaServiceFX.updateRutina(id, rutinaEditada);
 
                 if (exito) {
-                    mostrarAlerta("Éxito", "Reserva actualizada correctamente");
+                    mostrarAlerta("Éxito", "Rutina actualizada correctamente");
                     rutinaCargada = false;
                     limpiarCampos();
                     BtnBUSCAR_TODOS(null);
                 } else {
-                    mostrarAlerta("Error", "No se pudo actualizar la reserva");
+                    mostrarAlerta("Error", "No se pudo actualizar la rutina");
                 }
             }
 
@@ -160,47 +169,57 @@ public class RutinasController implements Initializable {
         }
     }
 
-    private void limpiarCampos() {
-        txtNombre.clear();
-        txtcorreo.clear();
-        txttelefono.clear();
-        txtRutina.clear();
-        txtidEditRU.clear();
-    }
-    
+    // 🗑️ Eliminar una rutina
     @FXML
     private void BtnELIMINAR(ActionEvent event) {
-                try {
-            int id = Integer.parseInt(txtiddelete.getText());
+        try {
+            Long id = Long.parseLong(txtiddelete.getText());
             boolean eliminado = GymRutinaServiceFX.deleteRutinaById(id);
 
             if (eliminado) {
-                mostrarAlerta("Eliminado", "La reserva con ID " + id + " fue eliminada correctamente.");
+                mostrarAlerta("Eliminado", "La rutina con ID " + id + " fue eliminada correctamente.");
                 TablaRutina.getItems().clear();
             } else {
-                mostrarAlerta("Error", "No se pudo eliminar la reserva con ID: " + id);
+                mostrarAlerta("Error", "No se pudo eliminar la rutina con ID: " + id);
             }
         } catch (NumberFormatException e) {
             mostrarAlerta("Error de formato", "Por favor ingresa un número válido de ID.");
         }
     }
+
+    // 💾 Guardar una nueva rutina
     @FXML
     private void BtnGUARDA_RUTINA(ActionEvent event) {
-        String nombre = txtNombre.getText();
-        String correo = txtcorreo.getText();
-        String telefono = txttelefono.getText();
-        String tipoRutina = txtRutina.getText();
+        String nombrerutina = txtNombre.getText().trim();
+        String dia = txtdia.getText().trim();
+        String horaI = txtincio.getText().trim();
+        String horaF = txtfin.getText().trim();
 
-        GymRutinaEntity reserva = new GymRutinaEntity(nombre, correo, telefono, tipoRutina);
-        boolean resultado = GymRutinaServiceFX.saveRutina(reserva);
+        if (nombrerutina.isEmpty() || dia.isEmpty() || horaI.isEmpty() || horaF.isEmpty()) {
+            mostrarAlerta("Error", "Todos los campos son obligatorios");
+            return;
+        }
+
+        GymRutinaEntity nuevaRutina = new GymRutinaEntity(nombrerutina, dia, horaI, horaF);
+        boolean resultado = GymRutinaServiceFX.saveRutina(nuevaRutina);
 
         if (resultado) {
-            mostrarAlerta("Éxito", "Reserva guardada correctamente");
+            mostrarAlerta("Éxito", "Rutina guardada correctamente");
             limpiarCampos();
+            BtnBUSCAR_TODOS(null);
         } else {
-            mostrarAlerta("Error", "Error al guardar reserva");
+            mostrarAlerta("Error", "Error al guardar rutina");
         }
     }
-    
-    
+
+    // 🔄 Limpieza general de campos
+    private void limpiarCampos() {
+        txtNombre.clear();
+        txtdia.clear();
+        txtincio.clear();
+        txtfin.clear();
+        txtidEditRU.clear();
+        txtidRU.clear();
+        txtiddelete.clear();
+    }
 }

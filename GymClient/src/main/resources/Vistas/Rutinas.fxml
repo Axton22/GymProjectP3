@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="541.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gym.gymclient.Controlador.RutinasController">
    <children>
-      <AnchorPane id="AnchorPane" layoutX="2.0" layoutY="2.0" prefHeight="541.0" prefWidth="701.0">
+      <AnchorPane id="AnchorPane" layoutX="2.0" layoutY="2.0" prefHeight="541.0" prefWidth="779.0">
          <children>
             <Button fx:id="btnBRutina" layoutX="118.0" layoutY="86.0" mnemonicParsing="false" onAction="#BtnBUSCAR_RUTINA" text="BUSCAR RUTINA" />
             <Button fx:id="btnbuscartodos" layoutX="420.0" layoutY="374.0" mnemonicParsing="false" onAction="#BtnBUSCAR_TODOS" text="BUSCAR TODOS" />
@@ -18,25 +18,25 @@
             <Button fx:id="btnguardarnuevaRU" layoutX="103.0" layoutY="362.0" mnemonicParsing="false" onAction="#BtnGUARDA_RUTINA" prefHeight="17.0" prefWidth="119.0" text="GUARDAR NUEVA" />
             <Label layoutX="31.0" layoutY="51.0" text="ID:" />
             <TextField fx:id="txtidRU" layoutX="97.0" layoutY="47.0" />
-            <TableView fx:id="TablaRutina" layoutX="272.0" layoutY="39.0" prefHeight="313.0" prefWidth="399.0">
+            <TableView fx:id="TablaRutina" layoutX="272.0" layoutY="39.0" prefHeight="313.0" prefWidth="471.0">
                <columns>
-                  <TableColumn fx:id="colidR" prefWidth="75.0" text="ID" />
-                  <TableColumn fx:id="colNombre" prefWidth="75.0" text="NOMBRE" />
-                  <TableColumn fx:id="colTelefono" prefWidth="75.0" text="TELEFONO" />
-                  <TableColumn fx:id="colCorreo" prefWidth="75.0" text="CORREO" />
-                  <TableColumn fx:id="colRutina" prefWidth="96.66664632161456" text="RUTINA" />
+                  <TableColumn fx:id="colidR" prefWidth="49.33331298828125" text="ID" />
+                  <TableColumn fx:id="colNameR" prefWidth="120.6666259765625" text="NOMBRE RUTINA" />
+                  <TableColumn fx:id="coldia" prefWidth="86.66665649414062" text="DIA" />
+                  <TableColumn fx:id="colinicio" prefWidth="112.00006103515625" text="HORA INICIO" />
+                  <TableColumn fx:id="colfin" prefWidth="100.66664632161456" text="HORA FIN" />
                </columns>
             </TableView>
             <TextField fx:id="txtNombre" layoutX="97.0" layoutY="152.0" />
-            <TextField fx:id="txttelefono" layoutX="97.0" layoutY="206.0" />
-            <TextField fx:id="txtcorreo" layoutX="97.0" layoutY="265.0" />
-            <Label layoutX="29.0" layoutY="156.0" text="NOMBRE:" />
-            <Label layoutX="25.0" layoutY="210.0" text="TELEFONO:" />
-            <Label layoutX="31.0" layoutY="269.0" text="CORREO:" />
+            <TextField fx:id="txtdia" layoutX="97.0" layoutY="206.0" />
+            <TextField fx:id="txtincio" layoutX="97.0" layoutY="265.0" />
+            <Label layoutX="19.0" layoutY="156.0" text="NOMBRE:" />
+            <Label layoutX="20.0" layoutY="210.0" text="DIA:" />
+            <Label layoutX="16.0" layoutY="269.0" text="HORA INICIO:" />
             <TextField fx:id="txtidEditRU" layoutX="97.0" layoutY="432.0" />
             <Label layoutX="38.0" layoutY="436.0" text="ID:" />
-            <TextField fx:id="txtRutina" layoutX="97.0" layoutY="311.0" />
-            <Label layoutX="31.0" layoutY="315.0" prefHeight="17.0" prefWidth="60.0" text="TIPO RUTI:" />
+            <TextField fx:id="txtfin" layoutX="97.0" layoutY="311.0" />
+            <Label layoutX="16.0" layoutY="315.0" prefHeight="17.0" prefWidth="60.0" text="HORA FIN:" />
             <TextField fx:id="txtiddelete" layoutX="397.0" layoutY="432.0" />
             <Label layoutX="358.0" layoutY="436.0" text="ID:" />
          </children>

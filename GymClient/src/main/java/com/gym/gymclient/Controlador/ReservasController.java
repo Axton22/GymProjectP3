@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,52 +18,37 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ReservasController implements Initializable {
 
-    @FXML
-    private Button btnBreserva;
-    @FXML
-    private Button btnbuscartodos;
-    @FXML
-    private Button btneditreserva;
-    @FXML
-    private Button btneliminar;
-    @FXML
-    private Button btnguardarreserva;
-    @FXML
-    private TableView<GymReservasEntity> TablaReserva;
-    @FXML
-    private TableColumn<GymReservasEntity, Long> colid;
-    @FXML
-    private TableColumn<GymReservasEntity, String> colNombre;
-    @FXML
-    private TableColumn<GymReservasEntity, String> colTelefono;
-    @FXML
-    private TableColumn<GymReservasEntity, String> colCorreo;
-    @FXML
-    private TableColumn<GymReservasEntity, String> colReserva;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txttelefono;
-    @FXML
-    private TextField txtcorreo;
-    @FXML
-    private TextField txtReserva;
-    @FXML
-    private TextField txtidR;
-    @FXML
-    private TextField txtidEditR;
-    @FXML
-    private TextField txtiddeleteR;
+    @FXML private Button btnBreserva;
+    @FXML private Button btnbuscartodos;
+    @FXML private Button btneditreserva;
+    @FXML private Button btneliminar;
+    @FXML private Button btnguardarreserva;
+
+    @FXML private TableView<GymReservasEntity> TablaReserva;
+    @FXML private TableColumn<GymReservasEntity, Long> colidReserva;
+    @FXML private TableColumn<GymReservasEntity, String> colFecha;
+    @FXML private TableColumn<GymReservasEntity, String> colHora;
+    @FXML private TableColumn<GymReservasEntity, String> colEstado;
+
+    @FXML private TextField txtidR;
+    @FXML private TextField txtidEditR;
+    @FXML private TextField txtiddeleteR;
+    @FXML private TextField txtfecha;
+    @FXML private TextField txthora;
+    @FXML private TextField txtestado;
 
     private boolean reservaCargada = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        colid.setCellValueFactory(new PropertyValueFactory<>("ReservaID"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("clientName"));
-        colCorreo.setCellValueFactory(new PropertyValueFactory<>("mail"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        colReserva.setCellValueFactory(new PropertyValueFactory<>("ReservaType"));
+        // Configurar columnas
+        colidReserva.setCellValueFactory(new PropertyValueFactory<>("reservationID"));
+        colFecha.setCellValueFactory(new PropertyValueFactory<>("reservationDate"));
+        colHora.setCellValueFactory(new PropertyValueFactory<>("reservationHour"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("state"));
+
+        // Cargar tabla al inicio
+        refreshTable();
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
@@ -75,6 +59,13 @@ public class ReservasController implements Initializable {
         alert.showAndWait();
     }
 
+    private void refreshTable() {
+        List<GymReservasEntity> reservas = GymReservasServiceFX.getAllReservas();
+        if (reservas != null) {
+            TablaReserva.setItems(FXCollections.observableArrayList(reservas));
+        }
+    }
+
     @FXML
     private void BtnBUSCAR_RESERVA(ActionEvent event) {
         try {
@@ -82,17 +73,11 @@ public class ReservasController implements Initializable {
             GymReservasEntity reserva = GymReservasServiceFX.getReservaById(id);
 
             if (reserva != null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Reserva encontrada");
-                alert.setHeaderText("Información de la reserva y el cliente");
-                alert.setContentText(
-                    "ID: " + reserva.getReservaID() + "\n" +
-                    "Nombre: " + reserva.getClientName() + "\n" +
-                    "Correo: " + reserva.getMail() + "\n" +
-                    "Teléfono: " + reserva.getPhone() + "\n" +
-                    "Tipo de reserva: " + reserva.getReservaType()
-                );
-                alert.showAndWait();
+                mostrarAlerta("Reserva encontrada",
+                    "ID: " + reserva.getReservationID() + "\n" +
+                    "Fecha: " + reserva.getReservationDate() + "\n" +
+                    "Hora: " + reserva.getReservationHour() + "\n" +
+                    "Estado: " + reserva.getState());
             } else {
                 mostrarAlerta("No encontrada", "No se encontró ninguna reserva con el ID " + id);
             }
@@ -103,20 +88,12 @@ public class ReservasController implements Initializable {
 
     @FXML
     private void BtnBUSCAR_TODOS(ActionEvent event) {
-        List<GymReservasEntity> reservas = GymReservasServiceFX.getAllReservas();
-
-        if (reservas != null) {
-            ObservableList<GymReservasEntity> datosTabla = FXCollections.observableArrayList(reservas);
-            TablaReserva.setItems(datosTabla);
-        } else {
-            mostrarAlerta("Error", "No se pudieron obtener las reservas del servidor.");
-        }
+        refreshTable();
     }
 
     @FXML
     private void BtnEDITAR_RESERVA(ActionEvent event) {
         String idText = txtidEditR.getText().trim();
-
         if (idText.isEmpty()) {
             mostrarAlerta("Error", "Debe ingresar un ID");
             return;
@@ -127,13 +104,10 @@ public class ReservasController implements Initializable {
 
             if (!reservaCargada) {
                 GymReservasEntity reserva = GymReservasServiceFX.getReservaById(id);
-
                 if (reserva != null) {
-                    txtNombre.setText(reserva.getClientName());
-                    txtcorreo.setText(reserva.getMail());
-                    txttelefono.setText(reserva.getPhone());
-                    txtReserva.setText(reserva.getReservaType());
-
+                    txtfecha.setText(reserva.getReservationDate());
+                    txthora.setText(reserva.getReservationHour());
+                    txtestado.setText(reserva.getState());
                     reservaCargada = true;
                     mostrarAlerta("Reserva cargada", "Modifica los datos y presiona nuevamente 'Editar'");
                 } else {
@@ -141,10 +115,9 @@ public class ReservasController implements Initializable {
                 }
             } else {
                 GymReservasEntity reservaEditada = new GymReservasEntity(
-                    txtNombre.getText(),
-                    txtcorreo.getText(),
-                    txttelefono.getText(),
-                    txtReserva.getText()
+                    txtfecha.getText(),
+                    txthora.getText(),
+                    txtestado.getText()
                 );
 
                 boolean exito = GymReservasServiceFX.updateReserva(id, reservaEditada);
@@ -153,7 +126,7 @@ public class ReservasController implements Initializable {
                     mostrarAlerta("Éxito", "Reserva actualizada correctamente");
                     reservaCargada = false;
                     limpiarCampos();
-                    BtnBUSCAR_TODOS(null);
+                    refreshTable();
                 } else {
                     mostrarAlerta("Error", "No se pudo actualizar la reserva");
                 }
@@ -164,45 +137,51 @@ public class ReservasController implements Initializable {
         }
     }
 
-    private void limpiarCampos() {
-        txtNombre.clear();
-        txtcorreo.clear();
-        txttelefono.clear();
-        txtReserva.clear();
-        txtidEditR.clear();
-    }
     @FXML
     private void BtnELIMINAR(ActionEvent event) {
         try {
-            int id = Integer.parseInt(txtiddeleteR.getText());
+            Long id = Long.parseLong(txtiddeleteR.getText());
             boolean eliminado = GymReservasServiceFX.deleteReservaById(id);
-
             if (eliminado) {
-                mostrarAlerta("Eliminado", "La reserva con ID " + id + " fue eliminada correctamente.");
-                TablaReserva.getItems().clear();
+                mostrarAlerta("Eliminado", "Reserva eliminada correctamente.");
+                refreshTable();
             } else {
-                mostrarAlerta("Error", "No se pudo eliminar la reserva con ID: " + id);
+                mostrarAlerta("Error", "No se pudo eliminar la reserva.");
             }
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error de formato", "Por favor ingresa un número válido de ID.");
+            mostrarAlerta("Error de formato", "Ingrese un ID válido.");
         }
     }
 
     @FXML
     private void BtnGUARDA_RESERVA(ActionEvent event) {
-        String nombre = txtNombre.getText();
-        String correo = txtcorreo.getText();
-        String telefono = txttelefono.getText();
-        String tipoReserva = txtReserva.getText();
+        String fecha = txtfecha.getText().trim();
+        String hora = txthora.getText().trim();
+        String estado = txtestado.getText().trim();
 
-        GymReservasEntity reserva = new GymReservasEntity(nombre, correo, telefono, tipoReserva);
+        if (fecha.isEmpty() || hora.isEmpty() || estado.isEmpty()) {
+            mostrarAlerta("Error", "Debe completar todos los campos.");
+            return;
+        }
+
+        GymReservasEntity reserva = new GymReservasEntity(fecha, hora, estado);
         boolean resultado = GymReservasServiceFX.saveReserva(reserva);
 
         if (resultado) {
             mostrarAlerta("Éxito", "Reserva guardada correctamente");
             limpiarCampos();
+            refreshTable();
         } else {
-            mostrarAlerta("Error", "Error al guardar reserva");
+            mostrarAlerta("Error", "Error al guardar la reserva");
         }
+    }
+
+    private void limpiarCampos() {
+        txtfecha.clear();
+        txthora.clear();
+        txtestado.clear();
+        txtidEditR.clear();
+        txtidR.clear();
+        txtiddeleteR.clear();
     }
 }

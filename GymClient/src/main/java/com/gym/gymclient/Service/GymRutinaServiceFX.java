@@ -7,83 +7,80 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class GymRutinaServiceFX {
-        private static final String BASE_URL = "http://localhost:8080/rutinas";
-        
-        public static boolean saveRutina(GymRutinaEntity rutina){       
-      try {
-            ObjectMapper mapper = new ObjectMapper();
+
+    private static final String BASE_URL = "http://localhost:8080/rutinas";
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+ 
+    public static boolean saveRutina(GymRutinaEntity rutina) {
+        try {
             String jsonString = mapper.writeValueAsString(rutina);
 
             URL url = new URL(BASE_URL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
             try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonString.getBytes("utf-8");
-                os.write(input, 0, input.length);
+                os.write(jsonString.getBytes(StandardCharsets.UTF_8));
             }
 
             int code = con.getResponseCode();
-            return code == 200;
+            return code == HttpURLConnection.HTTP_OK || code == HttpURLConnection.HTTP_CREATED;
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-            
-        }
+    }
 
-        public static List<GymRutinaEntity> getAllRutinas(){
-          List<GymRutinaEntity> rutina = new ArrayList<>();
-          
-           try {
+ 
+    public static List<GymRutinaEntity> getAllRutinas() {
+        List<GymRutinaEntity> rutinas = new ArrayList<>();
+        try {
             URL url = new URL(BASE_URL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
 
-            int code = con.getResponseCode();
-            if (code == 200) {
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+
                     StringBuilder response = new StringBuilder();
                     String line;
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    rutina = Arrays.asList(mapper.readValue(response.toString(), GymRutinaEntity[].class));
+                    rutinas = Arrays.asList(mapper.readValue(response.toString(), GymRutinaEntity[].class));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return rutina;
-            
-        }
-        public static GymRutinaEntity getRutinaById(Long id) {
-            
-            try {
+        return rutinas;
+    }
+
+    public static GymRutinaEntity getRutinaById(Long id) {
+        try {
             URL url = new URL(BASE_URL + "/" + id);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
 
-            int code = con.getResponseCode();
-            if (code == 200) {
-                ObjectMapper mapper = new ObjectMapper();
+            if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 return mapper.readValue(con.getInputStream(), GymRutinaEntity.class);
             } else {
-                System.out.println("Error al obtener reserva. Código: " + code);
+                System.out.println("⚠️ Error al obtener rutina. Código: " + con.getResponseCode());
                 return null;
             }
 
@@ -91,47 +88,45 @@ public class GymRutinaServiceFX {
             e.printStackTrace();
             return null;
         }
-        }
-        
-        public static boolean deleteRutinaById(int id) {
+    }
+
+
+    public static boolean deleteRutinaById(Long id) {
         try {
             URL url = new URL(BASE_URL + "/" + id);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("DELETE");
 
-            int responseCode = con.getResponseCode();
-            return responseCode == 200;
+            int code = con.getResponseCode();
+            return code == HttpURLConnection.HTTP_OK || code == HttpURLConnection.HTTP_NO_CONTENT;
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-        
-       public static boolean updateReserva(Long id, GymRutinaEntity rutina) {
+
+    public static boolean updateRutina(Long id, GymRutinaEntity rutina) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(rutina);
 
             URL url = new URL(BASE_URL + "/" + id);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("PUT");
             con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
             try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonString.getBytes("utf-8");
-                os.write(input, 0, input.length);
+                os.write(jsonString.getBytes(StandardCharsets.UTF_8));
             }
 
             int code = con.getResponseCode();
-            return code == 200 || code == 204;
+            return code == HttpURLConnection.HTTP_OK || code == HttpURLConnection.HTTP_NO_CONTENT;
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-        
-        
 }

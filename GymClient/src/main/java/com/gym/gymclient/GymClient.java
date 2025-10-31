@@ -1,4 +1,3 @@
-
 package com.gym.gymclient;
 
 import java.io.IOException;

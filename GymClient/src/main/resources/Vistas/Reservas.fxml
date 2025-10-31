@@ -15,28 +15,25 @@
             <Button fx:id="btnbuscartodos" layoutX="420.0" layoutY="374.0" mnemonicParsing="false" onAction="#BtnBUSCAR_TODOS" text="BUSCAR TODAS" />
             <Button fx:id="btneditreserva" layoutX="112.0" layoutY="466.0" mnemonicParsing="false" onAction="#BtnEDITAR_RESERVA" text="EDITAR RESERVA" />
             <Button fx:id="btneliminar" layoutX="437.0" layoutY="466.0" mnemonicParsing="false" onAction="#BtnELIMINAR" text="ELIMINAR" />
-            <Button fx:id="btnguardarreserva" layoutX="103.0" layoutY="362.0" mnemonicParsing="false" onAction="#BtnGUARDA_RESERVA" prefHeight="17.0" prefWidth="119.0" text="GUARDAR NUEVA" />
+            <Button fx:id="btnguardarreserva" layoutX="105.0" layoutY="311.0" mnemonicParsing="false" onAction="#BtnGUARDA_RESERVA" prefHeight="17.0" prefWidth="119.0" text="GUARDAR NUEVA" />
             <Label layoutX="31.0" layoutY="51.0" text="ID:" />
             <TextField fx:id="txtidR" layoutX="97.0" layoutY="47.0" />
             <TableView fx:id="TablaReserva" layoutX="272.0" layoutY="39.0" prefHeight="313.0" prefWidth="399.0">
                <columns>
-                  <TableColumn fx:id="colid" prefWidth="75.0" text="ID" />
-                  <TableColumn fx:id="colNombre" prefWidth="75.0" text="NOMBRE" />
-                  <TableColumn fx:id="colTelefono" prefWidth="75.0" text="TELEFONO" />
-                  <TableColumn fx:id="colCorreo" prefWidth="75.0" text="CORREO" />
-                  <TableColumn fx:id="colReserva" prefWidth="96.66664632161456" text="TIPO RESERVA" />
+                  <TableColumn fx:id="colidReserva" prefWidth="75.0" text="ID" />
+                  <TableColumn fx:id="colFecha" prefWidth="107.33331298828125" text="FECHA" />
+                  <TableColumn fx:id="colHora" prefWidth="102.66668701171875" text="HORA" />
+                  <TableColumn fx:id="colEstado" prefWidth="112.6666259765625" text="ESTADO" />
                </columns>
             </TableView>
-            <TextField fx:id="txtNombre" layoutX="97.0" layoutY="152.0" />
-            <TextField fx:id="txttelefono" layoutX="97.0" layoutY="206.0" />
-            <TextField fx:id="txtcorreo" layoutX="97.0" layoutY="265.0" />
-            <Label layoutX="29.0" layoutY="156.0" text="NOMBRE:" />
-            <Label layoutX="25.0" layoutY="210.0" text="TELEFONO:" />
-            <Label layoutX="31.0" layoutY="269.0" text="CORREO:" />
+            <TextField fx:id="txtfecha" layoutX="97.0" layoutY="152.0" />
+            <TextField fx:id="txthora" layoutX="97.0" layoutY="206.0" />
+            <TextField fx:id="txtestado" layoutX="97.0" layoutY="265.0" />
+            <Label layoutX="29.0" layoutY="156.0" text="FECHA:" />
+            <Label layoutX="30.0" layoutY="210.0" text="HORA:" />
+            <Label layoutX="31.0" layoutY="269.0" text="ESTADO:" />
             <TextField fx:id="txtidEditR" layoutX="97.0" layoutY="432.0" />
             <Label layoutX="38.0" layoutY="436.0" text="ID:" />
-            <TextField fx:id="txtReserva" layoutX="97.0" layoutY="311.0" />
-            <Label layoutX="31.0" layoutY="315.0" prefHeight="17.0" prefWidth="60.0" text="TIPO RESER:" />
             <TextField fx:id="txtiddeleteR" layoutX="397.0" layoutY="432.0" />
             <Label layoutX="358.0" layoutY="436.0" text="ID:" />
          </children>

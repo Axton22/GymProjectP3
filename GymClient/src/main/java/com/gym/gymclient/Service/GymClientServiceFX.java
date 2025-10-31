@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +30,7 @@ public class GymClientServiceFX {
             con.setDoOutput(true);
 
             try(OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonString.getBytes("utf-8");
-                os.write(input, 0, input.length);
+          os.write(jsonString.getBytes(StandardCharsets.UTF_8));
             }
 
 

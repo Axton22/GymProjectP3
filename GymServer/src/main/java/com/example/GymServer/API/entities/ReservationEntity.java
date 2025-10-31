@@ -40,9 +40,9 @@ public class ReservationEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "reservationID")
     private Integer reservationID;
-    @Column(name = "clientID")
+    @Column(name = "clntID")
     private Integer clientID;
-    @Column(name = "routineID")
+    @Column(name = "routID")
     private Integer routineID;
     @Column(name = "reservationDate")
     @Temporal(TemporalType.DATE)
